@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run API Security Scan
-        uses: uses: 42Crunch/api-security-audit-action@v1
+        uses: 42Crunch/api-security-audit-action@v1
         with:
           api-token: ${{ secrets.API_42CRUNCH_TOKEN }}
           sarif-report: api-audit.sarif
