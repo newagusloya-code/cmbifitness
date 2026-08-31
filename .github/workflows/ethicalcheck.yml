@@ -1,32 +1,12 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# API Security Testing for continuous security validation in development and production.
-
-# This workflow provides automated API security scanning to uncover vulnerabilities
-# using industry best practices and OWASP API standards.
-
-# Developers can rely on this workflow to evaluate every update and release,
-# ensuring that no APIs go to production with exploitable vulnerabilities.
-
-# Know your API and Applications are secure with automated API security testing.
-
 name: EthicalCheck-Workflow
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  # Customize trigger events based on your DevSecOps processes.
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
   schedule:
     - cron: '18 9 * * 4'
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
@@ -37,18 +17,17 @@ jobs:
   api-security-scan:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run API Security Audit
-        uses: 42Crunch/api-security-audit-action@v4.4
+      - uses: actions/checkout@v4
+      
+      - name: Run API Security Scan
+        uses: 42Crunch/api-security-audit-action@main
         with:
           api-token: ${{ secrets.API_42CRUNCH_TOKEN }}
           sarif-report: api-audit.sarif
         continue-on-error: true
 
-      - name: Upload SARIF results to GitHub Security tab
+      - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: ./api-audit.sarif
+          sarif_file: api-audit.sarif
